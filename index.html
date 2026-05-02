@@ -2273,8 +2273,17 @@ function updatePreview() {
   const am = document.getElementById("input-anniv-message"); if (am) state.annivMessage = am.value.trim();
 
   let p = PALETTES[state.palette];
-  // Mode jour/nuit : on GARDE la palette utilisateur mais on applique un filtre photo (cf plus bas)
-  // (avant on écrasait p par PALETTE_DAY/NIGHT, ce qui empêchait de changer les couleurs)
+  // Mode jour/nuit : on GARDE la palette utilisateur mais on l'éclaircit ou l'assombrit
+  // ET on applique un filtre photo (cf plus bas)
+  if (state.eventType === "TOURNOI") {
+    if (state.ambiance === "day") {
+      // Éclaircir la palette : tons plus lumineux et saturés
+      p = { ...p, from: shadeColor(p.from, 35), to: shadeColor(p.to, 25), accent: p.accent };
+    } else if (state.ambiance === "night") {
+      // Assombrir la palette : tons plus sombres et moody
+      p = { ...p, from: shadeColor(p.from, -40), to: shadeColor(p.to, -50), accent: p.accent };
+    }
+  }
   if (state.eventType === "SOIREE" && state.glow) p = PALETTE_SOIREE;
   if (state._inverted) {
     p = { ...p, from: shadeColor(p.accent, -30), to: shadeColor(p.accent, -60), accent: p.from };
@@ -2435,8 +2444,8 @@ function renderResultatsContent(middle, p, textColor, textMuted, borderColor, is
   const title = state.tournoiTitle || "TOURNOI";
   const medals = ["🥇", "🥈", "🥉"];
   const medalColors = ["#ffd700", "#c0c0c0", "#cd7f32"];
-  let html = `<div class="s-context-badge" style="background:${p.accent}18; border-color:${p.accent}45; color:${p.accent};"><span>🏅</span><span>PODIUM</span></div>`;
-  html += `<div class="s-title" style="color:#fff; font-size:28px; text-shadow:0 4px 20px rgba(0,0,0,0.7);">${escapeHtml(title.toUpperCase())}</div>`;
+  // Pas de badge contexte ici : le tag haut-droite affiche déjà PODIUM, et on a "RÉSULTATS" sous le titre
+  let html = `<div class="s-title" style="color:#fff; font-size:30px; text-shadow:0 4px 20px rgba(0,0,0,0.7); margin-top: 10px;">${escapeHtml(title.toUpperCase())}</div>`;
   html += `<div style="font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:${p.accent}; margin-bottom:14px;">RÉSULTATS</div>`;
   html += `<div class="s-podium-list">`;
   state.podium.forEach((podium, i) => {
@@ -3622,8 +3631,15 @@ updatePreview = function() {
       photoEl.classList.add("filter-" + state.photoFilter);
     }
   }
-  // Hero mode background : utilise la palette finale (avec invert)
+  // Hero mode background : utilise la palette finale (avec ambiance jour/nuit + invert)
   let pHero = PALETTES[state.palette];
+  if (state.eventType === "TOURNOI") {
+    if (state.ambiance === "day") {
+      pHero = { ...pHero, from: shadeColor(pHero.from, 35), to: shadeColor(pHero.to, 25), accent: pHero.accent };
+    } else if (state.ambiance === "night") {
+      pHero = { ...pHero, from: shadeColor(pHero.from, -40), to: shadeColor(pHero.to, -50), accent: pHero.accent };
+    }
+  }
   if (state.eventType === "SOIREE" && state.glow) pHero = PALETTE_SOIREE;
   if (state._inverted) {
     pHero = { ...pHero, from: shadeColor(pHero.accent, -30), to: shadeColor(pHero.accent, -60), accent: pHero.from };
