@@ -3248,45 +3248,38 @@ async function captureHD() {
   const tW = 1080;
   const tH = state.format === "post" ? 1350 : 1920;
 
-  // Masquer temporairement la photo CSS pour la composer en haute qualité
   const photoEl = document.getElementById("s-photo");
+  const bgEl = document.getElementById("s-bg");
+  const overlayEl = document.getElementById("s-overlay");
   const wasVisible = photoEl.classList.contains("visible");
-  if (wasVisible && state.photo) {
-    photoEl.style.opacity = "0";
-  }
+  const hasPhoto = wasVisible && state.photo;
 
-  // Capture html2canvas en supersampling 3x pour vraie HD
-  const ssScale = 3;
-  const cap = await html2canvas(canvas, {
-    scale: (tW * ssScale) / w,
-    useCORS: true, allowTaint: true, backgroundColor: null,
-    width: w, height: h, windowWidth: w, windowHeight: h,
-    logging: false, imageTimeout: 0,
-  });
+  // Sauvegarder les styles originaux
+  const photoOpacityOrig = photoEl.style.opacity;
+  const bgBgOrig = bgEl.style.background;
+  const overlayOpacityOrig = overlayEl.style.opacity;
 
-  // Canvas final
+  // ÉTAPE 1 : Préparer le canvas final
   const final = document.createElement("canvas");
   final.width = tW;
   final.height = tH;
   const ctx = final.getContext("2d");
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
-  ctx.fillStyle = "#080808";
-  ctx.fillRect(0, 0, tW, tH);
 
-  // Si photo, la composer en pleine résolution PUIS html2canvas par-dessus
-  if (wasVisible && state.photo) {
+  // ÉTAPE 2 : Si photo, dessiner la photo native HD en fond
+  if (hasPhoto) {
+    // Le BG sombre par défaut au cas où la photo est petite
+    ctx.fillStyle = "#080808";
+    ctx.fillRect(0, 0, tW, tH);
+
     await new Promise((resolve) => {
       const photoImg = new Image();
       photoImg.crossOrigin = "anonymous";
       photoImg.onload = () => {
-        // Determine la zone d'affichage de la photo selon le mode hero
         let dx = 0, dy = 0, dw = tW, dh = tH;
-        if (state.heroMode) {
-          dh = tH * 0.65;
-        }
+        if (state.heroMode) { dh = tH * 0.65; }
 
-        // Cover : photo prend toute la zone, recadrée si besoin
         const ir = photoImg.width / photoImg.height;
         const dr = dw / dh;
         let sx = 0, sy = 0, sw = photoImg.width, sh = photoImg.height;
@@ -3298,7 +3291,6 @@ async function captureHD() {
           sy = (photoImg.height - sh) / 2;
         }
 
-        // Appliquer filtres CSS si besoin via filter sur le contexte
         let ctxFilter = "none";
         const f = state.photoFilter;
         if (f === "intense") ctxFilter = "brightness(1.05) contrast(1.25) saturate(1.5)";
@@ -3312,14 +3304,44 @@ async function captureHD() {
         ctx.filter = ctxFilter;
         ctx.drawImage(photoImg, sx, sy, sw, sh, dx, dy, dw, dh);
         ctx.filter = "none";
+
+        // Dessiner l'overlay dégradé par-dessus la photo (comme dans le rendu CSS)
+        const grad = ctx.createLinearGradient(0, 0, 0, tH);
+        grad.addColorStop(0, "rgba(0,0,0,0.15)");
+        grad.addColorStop(0.4, "rgba(0,0,0,0.6)");
+        grad.addColorStop(1, "rgba(0,0,0,0.92)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, tW, tH);
+
         resolve();
       };
       photoImg.onerror = resolve;
       photoImg.src = state.photo;
     });
+
+    // ÉTAPE 3 : Cacher photo, bg et overlay AVANT capture html2canvas
+    // pour que html2canvas ne capture QUE le contenu (texte, badges, etc) avec fond transparent
+    photoEl.style.opacity = "0";
+    bgEl.style.background = "transparent";
+    overlayEl.style.opacity = "0";
+  } else {
+    // Pas de photo : laisser html2canvas faire le rendu complet (avec son fond gradient)
+    ctx.fillStyle = "#080808";
+    ctx.fillRect(0, 0, tW, tH);
   }
 
-  // Compose html2canvas par-dessus avec downsample 2 étapes
+  // ÉTAPE 4 : Capture html2canvas HD avec fond transparent (le contenu seul)
+  const ssScale = 3;
+  const cap = await html2canvas(canvas, {
+    scale: (tW * ssScale) / w,
+    useCORS: true, allowTaint: true,
+    backgroundColor: null,  // Transparent !
+    width: w, height: h, windowWidth: w, windowHeight: h,
+    logging: false, imageTimeout: 0,
+  });
+
+  // ÉTAPE 5 : Composer le contenu html2canvas par-dessus la photo
+  // Downsample en 2 étapes pour qualité optimale
   const step1 = document.createElement("canvas");
   step1.width = tW * 1.5;
   step1.height = tH * 1.5;
@@ -3329,9 +3351,12 @@ async function captureHD() {
   ctx1.drawImage(cap, 0, 0, step1.width, step1.height);
   ctx.drawImage(step1, 0, 0, tW, tH);
 
-  // Restore photo CSS
-  if (wasVisible) photoEl.style.opacity = "";
-
+  // ÉTAPE 6 : Restaurer tous les styles
+  if (hasPhoto) {
+    photoEl.style.opacity = photoOpacityOrig;
+    bgEl.style.background = bgBgOrig;
+    overlayEl.style.opacity = overlayOpacityOrig;
+  }
   safe.style.display = safeOrig;
   ub.style.animation = ubAnim;
   ub.style.transform = "";
