@@ -2,20 +2,8 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>P3 Story Generator</title>
-
-<!-- ══ PWA META ══ -->
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#0a0a0a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="P3 Story Gen">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P3 Story Generator v8 - Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -1146,25 +1134,25 @@ input:focus, select:focus { border-color: #333; }
 /* PODIUM RENDU */
 .s-podium-list {
   display: flex; flex-direction: column;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 .s-podium-item {
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 12px;
-  padding: 8px 12px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .s-podium-medal {
-  font-size: 20px;
+  font-size: 22px;
   flex-shrink: 0;
 }
 .s-podium-photo {
-  width: 36px; height: 36px;
+  width: 38px; height: 38px;
   border-radius: 50%;
   background: rgba(255,255,255,0.1);
   background-size: cover;
@@ -1175,13 +1163,13 @@ input:focus, select:focus { border-color: #333; }
 .s-podium-content { flex: 1; min-width: 0; }
 .s-podium-rank {
   font-family: 'Anton', sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 1.5px;
-  margin-bottom: 1px;
+  margin-bottom: 2px;
 }
 .s-podium-names {
   font-family: 'Anton', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #fff;
   letter-spacing: 0.5px;
   line-height: 1.1;
@@ -1419,257 +1407,10 @@ input:focus, select:focus { border-color: #333; }
 }
 .modal-close:hover { background: var(--surface2); color: #fff; }
 
-/* ════════════════════════════════════════
-   ════ RESPONSIVE MOBILE (PWA-ready) ════
-   ════════════════════════════════════════ */
-@media (max-width: 900px) {
-  body {
-    flex-direction: column;
-    height: 100vh;
-    height: 100dvh; /* viewport dynamique iOS */
-    overflow: hidden;
-  }
-
-  /* Onglets bottom bar */
-  .mobile-tabs {
-    display: flex !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    z-index: 50;
-    padding: 8px 6px calc(8px + env(safe-area-inset-bottom)) 6px;
-    gap: 4px;
-  }
-  .mobile-tab {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #555;
-    padding: 10px 4px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    transition: all 0.2s;
-    font-family: 'Poppins', sans-serif;
-  }
-  .mobile-tab .mt-icon { font-size: 20px; }
-  .mobile-tab.active {
-    background: rgba(201,168,76,0.12);
-    color: var(--gold);
-  }
-
-  /* Panel devient plein écran scrollable */
-  .panel {
-    width: 100%;
-    min-width: 100%;
-    height: calc(100vh - 70px);
-    height: calc(100dvh - 70px);
-    border-right: none;
-    padding-bottom: 90px;
-  }
-  .panel.mobile-hidden { display: none; }
-
-  .panel-header {
-    padding: 16px 18px 12px;
-  }
-  .panel-header h1 { font-size: 17px; letter-spacing: 2px; }
-  .panel-header p { font-size: 9px; }
-
-  .panel-body {
-    padding: 14px 18px 30px;
-    gap: 16px;
-  }
-
-  /* Preview mobile : plein écran scrollable */
-  .preview-area {
-    flex: 1;
-    height: calc(100vh - 70px);
-    height: calc(100dvh - 70px);
-    padding: 16px 12px 20px;
-  }
-  .preview-area.mobile-hidden { display: none; }
-
-  .preview-tabs {
-    margin-bottom: 12px;
-  }
-  .preview-tab {
-    padding: 7px 12px;
-    font-size: 10px;
-  }
-
-  /* Canvas adapté au mobile (plus petit pour tenir) */
-  #story-canvas.format-story,
-  #story-canvas.format-reel {
-    width: min(280px, 70vw);
-    height: calc(min(280px, 70vw) * 1.778);
-  }
-  #story-canvas.format-post {
-    width: min(280px, 70vw);
-    height: calc(min(280px, 70vw) * 1.25);
-  }
-
-  /* Boutons plus tactiles */
-  .opt-btn {
-    padding: 12px 6px;
-    min-height: 48px;
-  }
-  .opt-btn .icon { font-size: 18px; }
-  .toggle-row, .switch-row {
-    padding: 12px 14px;
-    min-height: 52px;
-  }
-  .palette-btn {
-    height: 44px;
-  }
-
-  /* Inputs plus tactiles */
-  input, select, textarea {
-    font-size: 16px; /* évite zoom auto iOS */
-    padding: 12px 14px;
-  }
-
-  /* Modals adaptés */
-  .modal-content {
-    margin: 16px;
-    padding: 20px;
-    max-height: calc(100vh - 32px);
-    max-height: calc(100dvh - 32px);
-  }
-
-  .crop-modal {
-    padding: 12px;
-  }
-  .crop-canvas-wrap {
-    width: min(300px, 80vw);
-    height: calc(min(300px, 80vw) * 1.778);
-  }
-  .crop-canvas-wrap.post-format {
-    height: calc(min(300px, 80vw) * 1.25);
-  }
-  .crop-controls {
-    width: min(300px, 80vw);
-  }
-
-  /* Toast plus haut sur mobile pour pas être caché par notch */
-  .toast {
-    top: calc(20px + env(safe-area-inset-top));
-    right: 12px;
-    left: 12px;
-    text-align: center;
-  }
-
-  /* Boutons d'export plus gros */
-  .btn-generate {
-    padding: 16px;
-    font-size: 16px;
-  }
-  .btn-secondary, .btn-export-zip, .btn-recap, .btn-story-chain {
-    padding: 12px;
-    font-size: 12px;
-  }
-
-  /* Position selector adapté */
-  .position-btn {
-    aspect-ratio: 1.4/1;
-  }
-
-  /* Multi cards plus compactes */
-  .multi-card, .podium-card, .template-card {
-    padding: 10px;
-  }
-}
-
-/* PWA mode standalone (installé) */
-@media (display-mode: standalone), (display-mode: fullscreen) {
-  body {
-    /* Couvrir tout l'écran y compris notch */
-    padding-top: env(safe-area-inset-top);
-  }
-  .panel-header {
-    padding-top: calc(16px + env(safe-area-inset-top));
-  }
-}
-
-/* Cacher les tabs mobile par défaut sur desktop */
-.mobile-tabs { display: none; }
-
-/* iOS install banner */
-.ios-install-banner {
-  display: none;
-  position: fixed;
-  bottom: calc(80px + env(safe-area-inset-bottom));
-  left: 12px;
-  right: 12px;
-  background: linear-gradient(135deg, var(--gold), #8a6f2c);
-  color: #000;
-  padding: 14px 16px;
-  border-radius: 14px;
-  z-index: 99;
-  font-family: 'Poppins', sans-serif;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  animation: slideUp 0.4s ease;
-}
-@keyframes slideUp {
-  from { transform: translateY(100px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-.ios-install-banner.show { display: block; }
-.ios-install-banner-title {
-  font-weight: 800;
-  font-size: 13px;
-  margin-bottom: 4px;
-  letter-spacing: 0.5px;
-}
-.ios-install-banner-text {
-  font-size: 11px;
-  line-height: 1.4;
-  opacity: 0.85;
-}
-.ios-install-banner-close {
-  position: absolute;
-  top: 8px; right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  color: #000;
-  cursor: pointer;
-  padding: 0 4px;
-  opacity: 0.6;
-}
-
 </style>
 </head>
 <body>
 <div class="toast" id="toast">Sauvegarde...</div>
-
-<!-- Bannière install iOS (Safari) -->
-<div class="ios-install-banner" id="ios-install-banner">
-  <button class="ios-install-banner-close" onclick="dismissIosBanner()">×</button>
-  <div class="ios-install-banner-title">📲 Installe P3 Story Gen</div>
-  <div class="ios-install-banner-text">Appuie sur <strong>Partager</strong> ⬆️ puis <strong>"Sur l'écran d'accueil"</strong> pour avoir l'app comme une vraie native, plein écran et offline.</div>
-</div>
-
-<!-- Bottom tabs mobile -->
-<div class="mobile-tabs" id="mobile-tabs">
-  <button class="mobile-tab active" id="mtab-config" onclick="switchMobileView('config')">
-    <span class="mt-icon">⚙️</span>
-    <span>Config</span>
-  </button>
-  <button class="mobile-tab" id="mtab-preview" onclick="switchMobileView('preview')">
-    <span class="mt-icon">📱</span>
-    <span>Aperçu</span>
-  </button>
-</div>
 
 <!-- MODAL CROP PHOTO -->
 <div class="crop-modal" id="crop-modal">
@@ -1723,7 +1464,7 @@ input:focus, select:focus { border-color: #333; }
       <p>Le P3 by Marina</p>
     </div>
     <button class="btn-theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Mode sombre">🌙</button>
-    <div class="version-badge">V9</div>
+    <div class="version-badge">V8</div>
   </div>
 
   <div class="panel-body">
@@ -2237,7 +1978,7 @@ let state = {
   darkMode: false, _inverted: false,
 };
 
-const STORAGE_KEY = "p3-story-gen-v9";
+const STORAGE_KEY = "p3-story-gen-v8";
 const STATS_KEY = "p3-story-gen-stats";
 let stats = { total: 0, formats: {}, types: {}, days: {} };
 
@@ -2340,13 +2081,6 @@ function setEventType(type, icon, tag, btn) {
   if (type === "SOIREE" && !state.glow) {
     state.glow = true;
     document.getElementById("glow-row").classList.add("active");
-  }
-  // Désactiver auto le mode hero pour les types structurés
-  // (Résultats, Multi, Anniv ont déjà leur layout interne)
-  if (["RESULTATS", "MULTI", "ANNIV"].includes(type) && state.heroMode) {
-    state.heroMode = false;
-    document.getElementById("hero-row").classList.remove("active");
-    document.getElementById("story-canvas").classList.remove("photo-hero");
   }
   updatePreview();
   saveState();
@@ -2711,21 +2445,15 @@ function renderResultatsContent(middle, p, textColor, textMuted, borderColor, is
   const medals = ["🥇", "🥈", "🥉"];
   const medalColors = ["#ffd700", "#c0c0c0", "#cd7f32"];
   // Pas de badge contexte ici : le tag haut-droite affiche déjà PODIUM, et on a "RÉSULTATS" sous le titre
-  let html = `<div class="s-title" style="color:#fff; font-size:26px; text-shadow:0 4px 20px rgba(0,0,0,0.7); margin-top: 4px; margin-bottom: 4px;">${escapeHtml(title.toUpperCase())}</div>`;
-  html += `<div style="font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:${p.accent}; margin-bottom:10px;">RÉSULTATS</div>`;
+  let html = `<div class="s-title" style="color:#fff; font-size:30px; text-shadow:0 4px 20px rgba(0,0,0,0.7); margin-top: 10px;">${escapeHtml(title.toUpperCase())}</div>`;
+  html += `<div style="font-size:11px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:${p.accent}; margin-bottom:14px;">RÉSULTATS</div>`;
   html += `<div class="s-podium-list">`;
   state.podium.forEach((podium, i) => {
     const names = podium.names || `Paire ${i + 1}`;
-    // Photo : balise img propre au lieu de background-image (plus fiable avec html2canvas)
-    let photoHtml = '';
-    if (podium.photo) {
-      photoHtml = `<img src="${podium.photo}" alt="" style="width:38px; height:38px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid ${medalColors[i]}; display:block;">`;
-    } else {
-      photoHtml = `<div style="width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.1); flex-shrink:0; border:2px solid ${medalColors[i]};"></div>`;
-    }
+    const photoStyle = podium.photo ? `background-image:url(${podium.photo});` : '';
     html += `<div class="s-podium-item">
       <div class="s-podium-medal">${medals[i]}</div>
-      ${photoHtml}
+      <div class="s-podium-photo" style="${photoStyle} border-color:${medalColors[i]};"></div>
       <div class="s-podium-content">
         <div class="s-podium-rank" style="color:${medalColors[i]};">${podium.rank}</div>
         <div class="s-podium-names">${escapeHtml(names)}</div>
@@ -3251,11 +2979,6 @@ function setFilter(filter, btn) {
 
 // ════ MODE PHOTO EN AVANT (HERO) ════
 function toggleHero() {
-  // Empêcher activation pour modes structurés
-  if (!state.heroMode && ["RESULTATS", "MULTI", "ANNIV"].includes(state.eventType)) {
-    showToast("Mode photo en avant indisponible pour ce type");
-    return;
-  }
   state.heroMode = !state.heroMode;
   document.getElementById("hero-row").classList.toggle("active", state.heroMode);
   const canvas = document.getElementById("story-canvas");
@@ -3664,16 +3387,6 @@ async function captureHD() {
   ub.style.animation = "none";
   ub.style.transform = "translateX(-50%) scale(1)";
 
-  // Sécurité : si on est en mode structuré, retirer photo-hero du canvas avant capture
-  const wasHero = canvas.classList.contains("photo-hero");
-  const heroIncompat = ["RESULTATS", "MULTI", "ANNIV"].includes(state.eventType);
-  if (wasHero && heroIncompat) {
-    canvas.classList.remove("photo-hero");
-  }
-
-  // Petit délai pour s'assurer que le DOM a réagi aux changements
-  await new Promise(r => setTimeout(r, 50));
-
   const w = canvas.offsetWidth;
   const h = canvas.offsetHeight;
   const tW = 1080;
@@ -3690,166 +3403,111 @@ async function captureHD() {
   const bgBgOrig = bgEl.style.background;
   const overlayOpacityOrig = overlayEl.style.opacity;
 
-  // Canvas final
+  // ÉTAPE 1 : Préparer le canvas final
   const final = document.createElement("canvas");
   final.width = tW;
   final.height = tH;
   const ctx = final.getContext("2d");
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
-  ctx.fillStyle = "#080808";
-  ctx.fillRect(0, 0, tW, tH);
 
-  // ═══════════════════════════════════════════
-  // CAS 1 : SANS PHOTO → html2canvas direct simple
-  // ═══════════════════════════════════════════
-  if (!hasPhoto) {
-    const cap = await html2canvas(canvas, {
-      scale: (tW * 2) / w,  // Scale 2x suffisant sans photo
-      useCORS: true, allowTaint: true,
-      backgroundColor: "#080808",
-      width: w, height: h, windowWidth: w, windowHeight: h,
-      logging: false, imageTimeout: 0,
+  // ÉTAPE 2 : Si photo, dessiner la photo native HD en fond
+  if (hasPhoto) {
+    // Le BG sombre par défaut au cas où la photo est petite
+    ctx.fillStyle = "#080808";
+    ctx.fillRect(0, 0, tW, tH);
+
+    await new Promise((resolve) => {
+      const photoImg = new Image();
+      photoImg.crossOrigin = "anonymous";
+      photoImg.onload = () => {
+        let dx = 0, dy = 0, dw = tW, dh = tH;
+        if (state.heroMode) { dh = tH * 0.60; }
+
+        const ir = photoImg.width / photoImg.height;
+        const dr = dw / dh;
+        let sx = 0, sy = 0, sw = photoImg.width, sh = photoImg.height;
+        if (ir > dr) {
+          sw = photoImg.height * dr;
+          sx = (photoImg.width - sw) / 2;
+        } else {
+          sh = photoImg.width / dr;
+          sy = (photoImg.height - sh) / 2;
+        }
+
+        let filterMode = state.photoFilter || "none";
+        // Si filtre = none mais ambiance jour/nuit, on applique le filtre d'ambiance
+        if (filterMode === "none") {
+          if (state.eventType === "TOURNOI" && state.ambiance === "day") filterMode = "day";
+          else if (state.eventType === "TOURNOI" && state.ambiance === "night") filterMode = "night";
+        }
+
+        // Dessiner la photo dans une zone temporaire pour appliquer le filtre pixel par pixel
+        // (Safari ne supporte pas correctement ctx.filter)
+        ctx.drawImage(photoImg, sx, sy, sw, sh, dx, dy, dw, dh);
+
+        // Appliquer le filtre directement sur les pixels de la zone photo
+        if (filterMode !== "none") {
+          applyPhotoFilter(ctx, dx, dy, dw, dh, filterMode);
+        }
+
+        // Dessiner l'overlay dégradé par-dessus la photo (comme dans le rendu CSS)
+        const grad = ctx.createLinearGradient(0, 0, 0, tH);
+        grad.addColorStop(0, "rgba(0,0,0,0.15)");
+        grad.addColorStop(0.4, "rgba(0,0,0,0.6)");
+        grad.addColorStop(1, "rgba(0,0,0,0.92)");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, tW, tH);
+
+        resolve();
+      };
+      photoImg.onerror = resolve;
+      photoImg.src = state.photo;
     });
-    // Dessiner direct sur final, downsample propre
-    ctx.drawImage(cap, 0, 0, tW, tH);
 
-    // Photos podium en native (si mode RESULTATS)
-    if (state.eventType === "RESULTATS") {
-      await drawPodiumPhotos(ctx, canvas, tW, w);
-    }
-
-    // Restaurer
-    if (wasHero && heroIncompat) canvas.classList.add("photo-hero");
-    safe.style.display = safeOrig;
-    ub.style.animation = ubAnim;
-    ub.style.transform = "";
-    return final.toDataURL("image/png", 1.0);
+    // ÉTAPE 3 : Cacher photo, bg et overlay AVANT capture html2canvas
+    // pour que html2canvas ne capture QUE le contenu (texte, badges, etc) avec fond transparent
+    photoEl.style.opacity = "0";
+    bgEl.style.background = "transparent";
+    overlayEl.style.opacity = "0";
+  } else {
+    // Pas de photo : laisser html2canvas faire le rendu complet (avec son fond gradient)
+    ctx.fillStyle = "#080808";
+    ctx.fillRect(0, 0, tW, tH);
   }
 
-  // ═══════════════════════════════════════════
-  // CAS 2 : AVEC PHOTO → composition native + html2canvas par dessus
-  // ═══════════════════════════════════════════
-  // Dessiner la photo native HD en fond
-  await new Promise((resolve) => {
-    const photoImg = new Image();
-    photoImg.crossOrigin = "anonymous";
-    photoImg.onload = () => {
-      let dx = 0, dy = 0, dw = tW, dh = tH;
-      const heroActive = state.heroMode && !heroIncompat;
-      if (heroActive) { dh = tH * 0.60; }
-
-      const ir = photoImg.width / photoImg.height;
-      const dr = dw / dh;
-      let sx = 0, sy = 0, sw = photoImg.width, sh = photoImg.height;
-      if (ir > dr) {
-        sw = photoImg.height * dr;
-        sx = (photoImg.width - sw) / 2;
-      } else {
-        sh = photoImg.width / dr;
-        sy = (photoImg.height - sh) / 2;
-      }
-
-      let filterMode = state.photoFilter || "none";
-      if (filterMode === "none") {
-        if (state.eventType === "TOURNOI" && state.ambiance === "day") filterMode = "day";
-        else if (state.eventType === "TOURNOI" && state.ambiance === "night") filterMode = "night";
-      }
-
-      ctx.drawImage(photoImg, sx, sy, sw, sh, dx, dy, dw, dh);
-      if (filterMode !== "none") {
-        applyPhotoFilter(ctx, dx, dy, dw, dh, filterMode);
-      }
-
-      // Overlay dégradé sombre
-      const grad = ctx.createLinearGradient(0, 0, 0, tH);
-      grad.addColorStop(0, "rgba(0,0,0,0.15)");
-      grad.addColorStop(0.4, "rgba(0,0,0,0.6)");
-      grad.addColorStop(1, "rgba(0,0,0,0.92)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, tW, tH);
-
-      resolve();
-    };
-    photoImg.onerror = resolve;
-    photoImg.src = state.photo;
-  });
-
-  // Cacher photo, bg et overlay AVANT capture html2canvas
-  photoEl.style.opacity = "0";
-  bgEl.style.background = "transparent";
-  overlayEl.style.opacity = "0";
-
-  // Capture html2canvas du contenu seul (transparent)
+  // ÉTAPE 4 : Capture html2canvas HD avec fond transparent (le contenu seul)
+  const ssScale = 3;
   const cap = await html2canvas(canvas, {
-    scale: (tW * 2) / w,
+    scale: (tW * ssScale) / w,
     useCORS: true, allowTaint: true,
-    backgroundColor: null,
+    backgroundColor: null,  // Transparent !
     width: w, height: h, windowWidth: w, windowHeight: h,
     logging: false, imageTimeout: 0,
   });
 
-  // Composer par-dessus
-  ctx.drawImage(cap, 0, 0, tW, tH);
+  // ÉTAPE 5 : Composer le contenu html2canvas par-dessus la photo
+  // Downsample en 2 étapes pour qualité optimale
+  const step1 = document.createElement("canvas");
+  step1.width = tW * 1.5;
+  step1.height = tH * 1.5;
+  const ctx1 = step1.getContext("2d");
+  ctx1.imageSmoothingEnabled = true;
+  ctx1.imageSmoothingQuality = "high";
+  ctx1.drawImage(cap, 0, 0, step1.width, step1.height);
+  ctx.drawImage(step1, 0, 0, tW, tH);
 
-  // Photos podium en native (si mode RESULTATS)
-  if (state.eventType === "RESULTATS") {
-    await drawPodiumPhotos(ctx, canvas, tW, w);
+  // ÉTAPE 6 : Restaurer tous les styles
+  if (hasPhoto) {
+    photoEl.style.opacity = photoOpacityOrig;
+    bgEl.style.background = bgBgOrig;
+    overlayEl.style.opacity = overlayOpacityOrig;
   }
-
-  // Restaurer
-  photoEl.style.opacity = photoOpacityOrig;
-  bgEl.style.background = bgBgOrig;
-  overlayEl.style.opacity = overlayOpacityOrig;
-  if (wasHero && heroIncompat) canvas.classList.add("photo-hero");
   safe.style.display = safeOrig;
   ub.style.animation = ubAnim;
   ub.style.transform = "";
 
   return final.toDataURL("image/png", 1.0);
-}
-
-// Helper : redessiner les photos rondes podium en native
-async function drawPodiumPhotos(ctx, canvas, tW, w) {
-  const canvasRect = canvas.getBoundingClientRect();
-  const ratio = tW / w;
-  const podiumItems = canvas.querySelectorAll(".s-podium-item");
-  for (let i = 0; i < podiumItems.length; i++) {
-    const item = podiumItems[i];
-    const imgEl = item.querySelector("img");
-    if (!imgEl) continue;
-    const imgRect = imgEl.getBoundingClientRect();
-    const px = (imgRect.left - canvasRect.left) * ratio;
-    const py = (imgRect.top - canvasRect.top) * ratio;
-    const ps = imgRect.width * ratio;
-    const podiumPhoto = state.podium[i] && state.podium[i].photo;
-    if (!podiumPhoto) continue;
-    await new Promise((resolve) => {
-      const native = new Image();
-      native.crossOrigin = "anonymous";
-      native.onload = () => {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(px + ps/2, py + ps/2, ps/2, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
-        const ir = native.width / native.height;
-        let sx = 0, sy = 0, sw = native.width, sh = native.height;
-        if (ir > 1) {
-          sw = native.height;
-          sx = (native.width - sw) / 2;
-        } else {
-          sh = native.width;
-          sy = (native.height - sh) / 2;
-        }
-        ctx.drawImage(native, sx, sy, sw, sh, px, py, ps, ps);
-        ctx.restore();
-        resolve();
-      };
-      native.onerror = resolve;
-      native.src = podiumPhoto;
-    });
-  }
 }
 
 // REMPLACER exportPNG pour utiliser captureHD
@@ -3991,97 +3649,12 @@ updatePreview = function() {
   canvas.style.setProperty("--hero-bg-to", pHero.to);
 };
 
-// ════════════════════════════════════════
-// ════ PWA + MOBILE LOGIC ════
-// ════════════════════════════════════════
-
-// ─── Mobile view switcher (Config / Preview) ───
-function switchMobileView(view) {
-  const panel = document.querySelector(".panel");
-  const previewArea = document.querySelector(".preview-area");
-  const configTab = document.getElementById("mtab-config");
-  const previewTab = document.getElementById("mtab-preview");
-
-  if (view === "config") {
-    panel.classList.remove("mobile-hidden");
-    previewArea.classList.add("mobile-hidden");
-    configTab.classList.add("active");
-    previewTab.classList.remove("active");
-  } else {
-    panel.classList.add("mobile-hidden");
-    previewArea.classList.remove("mobile-hidden");
-    configTab.classList.remove("active");
-    previewTab.classList.add("active");
-    // Forcer un updatePreview pour s'assurer que tout est rendu
-    updatePreview();
-  }
-}
-
-// Initialiser le mode mobile : par défaut on montre la preview après config
-function initMobileMode() {
-  if (window.innerWidth <= 900) {
-    // Sur mobile, on commence par la config
-    document.querySelector(".preview-area").classList.add("mobile-hidden");
-  }
-}
-window.addEventListener("resize", () => {
-  if (window.innerWidth > 900) {
-    document.querySelector(".panel").classList.remove("mobile-hidden");
-    document.querySelector(".preview-area").classList.remove("mobile-hidden");
-  } else {
-    initMobileMode();
-  }
-});
-
-// ─── Service Worker registration ───
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js")
-      .then(reg => console.log("✅ Service Worker enregistré"))
-      .catch(err => console.log("⚠️ Service Worker non enregistré (normal en local file://)", err));
-  });
-}
-
-// ─── iOS Install banner ───
-function isIOS() {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-}
-function isStandalone() {
-  return window.navigator.standalone === true ||
-         window.matchMedia("(display-mode: standalone)").matches;
-}
-function showIosBannerIfNeeded() {
-  // Afficher seulement si iOS Safari et pas déjà installé et pas déjà fermé
-  const dismissed = localStorage.getItem("ios-install-dismissed");
-  if (isIOS() && !isStandalone() && !dismissed) {
-    setTimeout(() => {
-      document.getElementById("ios-install-banner").classList.add("show");
-    }, 3000); // Apparaît après 3s
-  }
-}
-function dismissIosBanner() {
-  document.getElementById("ios-install-banner").classList.remove("show");
-  localStorage.setItem("ios-install-dismissed", "1");
-}
-
-// ─── Empêcher zoom double-tap iOS ───
-let lastTouchEnd = 0;
-document.addEventListener("touchend", (e) => {
-  const now = Date.now();
-  if (now - lastTouchEnd <= 300) {
-    e.preventDefault();
-  }
-  lastTouchEnd = now;
-}, { passive: false });
-
 // INIT
 loadState();
 loadStats();
 restoreFilterUI();
 renderTemplates();
 updatePreview();
-initMobileMode();
-showIosBannerIfNeeded();
 
 </script>
 </body>
