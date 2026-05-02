@@ -1,0 +1,27 @@
+{
+  "name": "P3 Story Generator",
+  "short_name": "P3 Story Gen",
+  "description": "Générateur de visuels Instagram pour Le P3 by Marina",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080808",
+  "theme_color": "#0a0a0a",
+  "categories": ["productivity", "photo"],
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
