@@ -3497,6 +3497,60 @@ async function captureHD() {
   ctx1.drawImage(cap, 0, 0, step1.width, step1.height);
   ctx.drawImage(step1, 0, 0, tW, tH);
 
+  // ÉTAPE 5.5 : Redessiner les photos podium en native HD pour qualité max
+  // (le background-image rasterisé par html2canvas est de mauvaise qualité)
+  if (state.eventType === "RESULTATS") {
+    const canvasRect = canvas.getBoundingClientRect();
+    const ratio = tW / w;
+    const podiumDivs = canvas.querySelectorAll(".s-podium-photo");
+    for (let i = 0; i < podiumDivs.length; i++) {
+      const podiumPhoto = state.podium[i] && state.podium[i].photo;
+      if (!podiumPhoto) continue;
+      const divEl = podiumDivs[i];
+      const divRect = divEl.getBoundingClientRect();
+      const px = (divRect.left - canvasRect.left) * ratio;
+      const py = (divRect.top - canvasRect.top) * ratio;
+      const ps = divRect.width * ratio;
+      // Récupérer la couleur de bordure pour la redessiner
+      const borderColor = divEl.style.borderColor || "#fff";
+      await new Promise((resolve) => {
+        const native = new Image();
+        native.crossOrigin = "anonymous";
+        native.onload = () => {
+          ctx.save();
+          // Découpe circulaire
+          ctx.beginPath();
+          ctx.arc(px + ps/2, py + ps/2, ps/2, 0, Math.PI * 2);
+          ctx.closePath();
+          ctx.clip();
+          // Dessiner la photo en cover dans le cercle
+          const ir = native.width / native.height;
+          let sx = 0, sy = 0, sw = native.width, sh = native.height;
+          if (ir > 1) {
+            sw = native.height;
+            sx = (native.width - sw) / 2;
+          } else {
+            sh = native.width;
+            sy = (native.height - sh) / 2;
+          }
+          ctx.drawImage(native, sx, sy, sw, sh, px, py, ps, ps);
+          ctx.restore();
+          // Redessiner la bordure colorée par-dessus
+          ctx.save();
+          ctx.strokeStyle = borderColor;
+          ctx.lineWidth = 2 * ratio;
+          ctx.beginPath();
+          ctx.arc(px + ps/2, py + ps/2, ps/2 - ctx.lineWidth/2, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+          resolve();
+        };
+        native.onerror = resolve;
+        native.src = podiumPhoto;
+      });
+    }
+  }
+
   // ÉTAPE 6 : Restaurer tous les styles
   if (hasPhoto) {
     photoEl.style.opacity = photoOpacityOrig;
